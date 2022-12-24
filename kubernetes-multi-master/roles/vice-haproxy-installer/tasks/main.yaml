@@ -1,0 +1,11 @@
+---
+- name: Install haproxy
+  package:
+    name: haproxy
+    state: present
+
+- name: Generate haproxy.cfg
+  template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    mode: 644

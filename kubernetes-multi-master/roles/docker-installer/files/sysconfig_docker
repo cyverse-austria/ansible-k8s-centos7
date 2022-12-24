@@ -1,0 +1,5 @@
+OPTIONS='--selinux-enabled=false --signature-verification=false'
+if [ -z "${DOCKER_CERT_PATH}" ]; then
+    DOCKER_CERT_PATH=/etc/docker
+fi
+DOCKER_NOFILE=1000000

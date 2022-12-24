@@ -1,0 +1,57 @@
+---
+
+- name: Check current Kubernetes controler status
+  command: kubeadm token list
+  register: token_list_result
+  ignore_errors: True
+
+- name: Initialize Kubernetes controler
+  command: |
+    kubeadm init --pod-network-cidr={{kubernetes_network}} --service-cidr={{kubernetes_service_network}}
+  when: "'failed' in token_list_result.stderr"
+
+- name: Waiting for configuration to become available
+  wait_for:
+    path: /etc/kubernetes/admin.conf
+  when: "'failed' in token_list_result.stderr"
+
+- name: Make .kube directory
+  file:
+    path: /root/.kube
+    state: directory
+    mode: 0700
+    owner: root
+
+- name: Copy Kubernetes config (root)
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+    owner: root
+    group: root
+
+#- name: Networking
+#  include_tasks: "{{ kubernetes_default_networking }}.yml"
+
+- name: Get cluster token
+  shell: kubeadm token list | awk 'NR==2{print $1}'
+  register: token_result
+
+- set_fact:
+    token: '{{token_result.stdout_lines}}'
+
+- name: Get cluster ca-cert-hash
+  shell: "openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'"
+  register: cert_result
+
+- set_fact:
+    cert: '{{cert_result.stdout_lines}}'
+
+# using weave addon: https://www.weave.works/docs/net/latest/kubernetes/kube-addon/
+- name: install Pod network
+  become: yes
+  become_user: root
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" >> pod_setup.txt
+  args:
+    chdir: $HOME
+    creates: pod_setup.txt
