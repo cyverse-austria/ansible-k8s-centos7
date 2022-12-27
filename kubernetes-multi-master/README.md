@@ -158,6 +158,12 @@ scp root@k8s-c1.cyverse.at:/etc/kubernetes/admin.conf ~/.kube/config
 
 
 
+# install weave CNI 
+```bash
+# https://www.weave.works/docs/net/latest/kubernetes/kube-addon/
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+```
+
 # Tainting and Labeling VICE Worker Nodes
 Once you have your nodes joined the cluster:
 
