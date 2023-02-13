@@ -45,8 +45,8 @@ ansible-playbook -i inventory/ provision-nodes.yml --user root
 
 
 ## WARNING
+### Destroy the kubernetes cluster
 ansible-playbook -i inventory/ destroy.yml --user root
-
 ```
 
 ### Initialize the first Master node
@@ -92,6 +92,7 @@ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/we
 
 **RockyLinux +9**
 ```bash
+# TODO: find the specific version
 kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
 
