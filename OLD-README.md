@@ -223,4 +223,37 @@ https://www.youtube.com/watch?v=gXz4cq3PKdg
 * Clsuter CA (cluster certificate authority) - all the certificates that will b used in the cluster is signed by this CA.
 
 
+# original inventory
 
+```conf
+[k8s:children]
+k8s-control-plane
+k8s-worker
+
+[kube-apiserver-haproxy]
+k8s-reverse-proxy.cyverse.at
+
+[k8s-control-plane]
+k8s-c1.cyverse.at
+k8s-c2.cyverse.at
+
+[k8s-storage:children]
+k8s-worker
+
+[k8s-worker]
+k8s-w1.cyverse.at
+k8s-w2.cyverse.at
+k8s-w3.cyverse.at
+k8s-w4.cyverse.at
+k8s-w5.cyverse.at
+vice-w1.cyverse.at
+
+[vice-workers]
+vice-w1.cyverse.at
+
+[outward-facing-proxy]
+vice-haproxy.cyverse.at
+
+[haproxy]
+vice-haproxy.cyverse.at
+```

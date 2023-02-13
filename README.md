@@ -1,5 +1,10 @@
 # ansible-k8s-centos7
 
+`Ansible version: 2.13.3`
+
+`kubernetes version: 1.26.1`
+
+
 Ansible playbooks to deploy kubernetes on Centos7.
 
 **Setup HA control plane/multi master node with Haproxy**
@@ -37,6 +42,11 @@ ansible-playbook -i inventory/ firewalld-config.yml --user root
 # install all dependencies for hosts
 ## This will also setup the haproxy for the master node proxy
 ansible-playbook -i inventory/ provision-nodes.yml --user root
+
+
+## WARNING
+### Destroy the kubernetes cluster
+ansible-playbook -i inventory/ destroy.yml --user root
 ```
 
 ### Initialize the first Master node
@@ -82,6 +92,7 @@ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/we
 
 **RockyLinux +9**
 ```bash
+# TODO: find the specific version
 kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
 

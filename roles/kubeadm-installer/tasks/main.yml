@@ -14,17 +14,17 @@
 
 - name: install kubelet
   package:
-    name: kubelet-1.25.5
+    name: kubelet-1.26.1
     state: present
 
 - name: install kubeadm
   package:
-    name: kubeadm-1.25.5
+    name: kubeadm-1.26.1
     state: present
 
 - name: install kubectl
   package:
-    name: kubectl-1.25.5
+    name: kubectl-1.26.1
     state: present
 
 - name: copy k8s.conf
