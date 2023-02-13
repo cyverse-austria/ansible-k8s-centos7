@@ -92,7 +92,10 @@ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/we
 
 **RockyLinux +9**
 ```bash
-# TODO: find the specific version
+# v0.21.1
+kubectl apply -f https://github.com/flannel-io/flannel/releases/download/v0.21.1/kube-flannel.yml
+
+# latest
 kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
 
