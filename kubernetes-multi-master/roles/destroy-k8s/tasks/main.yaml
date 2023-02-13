@@ -1,15 +1,18 @@
 ---
-- name: Copy & Create File.
+- name: "Copy destroy.sh scipt on the remote hosts"
   copy:
-    dest: /root/destroy.sh
-    content: |
-    #!/bin/bash
-    Please place your Shell Script here.
+    src: destroy.sh
+    dest: /root/
+    mode: 0755
 
-- name: Run Shell Script.
-  shell: sh /root/destroy.sh
+- name: "Execute the script"
+  command: sh ~/destroy.sh
+  register: status
+- debug:
+   var: status.stdout_lines
 
 - name: Remove Shell Script
   file:
    path: /root/destroy.sh
    state: absent
+
