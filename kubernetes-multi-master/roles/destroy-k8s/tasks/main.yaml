@@ -1,0 +1,15 @@
+---
+- name: Copy & Create File.
+  copy:
+    dest: /root/destroy.sh
+    content: |
+    #!/bin/bash
+    Please place your Shell Script here.
+
+- name: Run Shell Script.
+  shell: sh /root/destroy.sh
+
+- name: Remove Shell Script
+  file:
+   path: /root/destroy.sh
+   state: absent
