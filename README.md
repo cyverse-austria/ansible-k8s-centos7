@@ -69,6 +69,17 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
+#### install weave CNI 
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+
+```bash
+# https://www.weave.works/docs/net/latest/kubernetes/kube-addon/
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+```
+
 ### Join the second Master node
 
 ```bash
@@ -100,12 +111,6 @@ kubeadm join <HAPROXY-IP>:6443 --token 6ixj5w.dj7eai8zw1kx8y34 \
 ```
 
 # Extra
-
-## install weave CNI 
-```bash
-# https://www.weave.works/docs/net/latest/kubernetes/kube-addon/
-kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
-```
 
 ## Tainting and Labeling VICE Worker Nodes
 Once you have your nodes joined the cluster:
