@@ -40,6 +40,7 @@ ansible-playbook -i inventory/ provision-nodes.yml --user root
 ```
 
 ### Initialize the first Master node
+**keep in mind to edit the haproxy of and remove the first second master, because it will allways give timeout since the second master is not initiated, once the first master is initiated you can add back the second master to the haproxy**
 
 This will join the first Master node to the cluster
 
