@@ -95,6 +95,8 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 **CENTOS**
 ```bash
 # https://www.weave.works/docs/net/latest/kubernetes/kube-addon/
+# for rockylinux 9
+# install  this package: `iptables-legacy`
 kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
 ```
 
