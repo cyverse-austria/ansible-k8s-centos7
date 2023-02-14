@@ -1,7 +1,16 @@
-- name: Setup k8s controler for haproxy
-  hosts: k8s-control-plane
+- name: Setup k8s controler main
+  hosts: k8s-control-plane[0]
   become: yes
   gather_facts: yes
   strategy: linear
   roles:
     - k8s-controler-haproxy 
+
+
+- name: Setup k8s controler others
+  hosts: k8s-control-plane[1:]
+  become: yes
+  gather_facts: yes
+  strategy: linear
+  # roles:
+  #   - k8s-controler-haproxy-other
