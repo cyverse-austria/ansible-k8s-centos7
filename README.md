@@ -43,10 +43,16 @@ ansible-playbook -i inventory/ firewalld-config.yml --user root
 ## This will also setup the haproxy for the master node proxy
 ansible-playbook -i inventory/ provision-nodes.yml --user root
 
+## WORK IN PROGRESS
+ansible-playbook -i inventory/ multi-master.yml --user root
+
 
 ## WARNING
 ### Destroy the kubernetes cluster
 ansible-playbook -i inventory/ destroy.yml --user root
+
+
+
 ```
 
 ### Initialize the first Master node

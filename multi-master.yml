@@ -12,5 +12,5 @@
   become: yes
   gather_facts: yes
   strategy: linear
-  # roles:
-  #   - k8s-controler-haproxy-other
+  roles:
+    - k8s-controler-join
