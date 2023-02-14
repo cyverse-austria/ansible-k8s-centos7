@@ -44,6 +44,8 @@ ansible-playbook -i inventory/ firewalld-config.yml --user root
 ansible-playbook -i inventory/ provision-nodes.yml --user root
 
 ## WORK IN PROGRESS
+## init works
+## join master does not yet
 ansible-playbook -i inventory/ multi-master.yml --user root
 
 
