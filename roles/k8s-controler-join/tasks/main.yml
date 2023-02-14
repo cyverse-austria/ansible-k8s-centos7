@@ -1,4 +1,9 @@
 ---
+- name: Check current Kubernetes controler status
+  command: kubeadm token list
+  register: token_list_result
+  ignore_errors: True
+
 - name: Get cluster certificate key
   shell: kubeadm init phase upload-certs --upload-certs
   register: certificate_key
@@ -6,11 +11,6 @@
 
 - set_fact:
     certificate_key: '{{certificate_key.stdout_lines}}'
-
-- name: Check current Kubernetes controler status
-  command: kubeadm token list
-  register: token_list_result
-  ignore_errors: True
 
 - name: join Kubernetes controler
   command: |
