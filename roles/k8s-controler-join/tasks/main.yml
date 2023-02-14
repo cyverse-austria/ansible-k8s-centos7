@@ -1,4 +1,11 @@
 ---
+- name: Get cluster certificate key
+  shell: kubeadm init phase upload-certs --upload-certs
+  register: certificate_key
+  when: "'failed' in token_list_result.stderr"
+
+- set_fact:
+    certificate_key: '{{certificate_key.stdout_lines}}'
 
 - name: Check current Kubernetes controler status
   command: kubeadm token list
@@ -7,7 +14,7 @@
 
 - name: join Kubernetes controler
   command: |
-    kubeadm join 167.71.51.151:6443 --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}} --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}} --control-plane --certificate-key <FIND THIS>
+    kubeadm join 167.71.51.151:6443 --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}} --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}} --control-plane --certificate-key {{ certificate_key }}
   when: "'failed' in token_list_result.stderr"
 
 - name: Waiting for configuration to become available
