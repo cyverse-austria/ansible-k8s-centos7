@@ -14,7 +14,7 @@
 
 - name: join Kubernetes controler
   command: |
-    kubeadm join 167.71.51.151:6443 --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}} --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}} --control-plane --certificate-key {{ certificate_key }}
+    kubeadm join {{hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address}}:{{kubernetes_default_port}} --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}} --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}} --control-plane --certificate-key {{ certificate_key }}
   when: "'failed' in token_list_result.stderr"
 
 - name: Waiting for configuration to become available
