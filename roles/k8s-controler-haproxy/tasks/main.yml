@@ -7,7 +7,7 @@
 
 - name: Initialize Kubernetes controler
   command: |
-    kubeadm init --control-plane-endpoint="167.71.51.151:6443" --upload-certs --pod-network-cidr={{kubernetes_network}}
+    kubeadm init --control-plane-endpoint="{{hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address}}:{{kubernetes_default_port}}" --upload-certs --pod-network-cidr={{kubernetes_network}}
   when: "'failed' in token_list_result.stderr"
 
 - name: Waiting for configuration to become available

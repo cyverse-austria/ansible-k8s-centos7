@@ -1,3 +1,8 @@
+# gather facts from haproxy node
+- hosts: kube-apiserver-haproxy[0]
+  name: Gather facts from collectors
+  tasks: [ ]
+  
 - name: Setup k8s controler main
   hosts: k8s-control-plane[0]
   become: yes
@@ -15,10 +20,7 @@
 #   roles:
 #     - k8s-controler-join
 
-# gather facts from haproxy node
-- hosts: kube-apiserver-haproxy[0]
-  name: Gather facts from collectors
-  tasks: [ ]
+
 
 - name: Setup k8s worker
   hosts: 
