@@ -4,13 +4,13 @@
   register: token_list_result
   ignore_errors: True
 
-- name: Get cluster certificate key
-  shell: kubeadm init phase upload-certs --upload-certs
-  register: certificate_key
-  when: "'failed' in token_list_result.stderr"
+# - name: Get cluster certificate key
+#   shell: kubeadm init phase upload-certs --upload-certs
+#   register: certificate_key
+#   when: "'failed' in token_list_result.stderr"
 
-- set_fact:
-    certificate_key: '{{certificate_key.stdout_lines}}'
+# - set_fact:
+#     certificate_key: '{{certificate_key.stdout_lines}}'
 
 - name: join Kubernetes controler
   command: |

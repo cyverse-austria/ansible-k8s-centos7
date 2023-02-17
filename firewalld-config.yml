@@ -29,3 +29,20 @@
         immediate: yes
         service: https
         state: enabled
+
+- name: Disable SWAP
+  hosts: k8s-worker
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+      shell: |
+        swapoff -a
+  
+
+    - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+        replace: '# \1'
