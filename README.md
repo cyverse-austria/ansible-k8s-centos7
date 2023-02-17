@@ -120,6 +120,25 @@ kubeadm join <HAPROXY-IP>:6443 --token 6ixj5w.dj7eai8zw1kx8y34 \
 # kubeadm init phase upload-certs --upload-certs 
 ```
 
+**Incase you dont have the key and certs**
+```bash
+
+## to get full command
+ssh c1
+kubeadm token create --print-join-command
+# kubeadm join 167.71.51.151:6443 --token o23e4r.pz3kfblrajle84ya --discovery-token-ca-cert-hash sha256:6949847a4d9f727d7fb2053e0d464044942f3769e7e272c53db59e48e89509fa
+
+## and get --certificate-key
+kubeadm init phase upload-certs --upload-certs 
+
+## add this to the first command
+# --control-plane --certificate-key <output of kubeadm init phase upload-certs --upload-certs>
+
+ssh c2
+
+kubeadm join 167.71.51.151:6443 --token o23e4r.pz3kfblrajle84ya --discovery-token-ca-cert-hash sha256:6949847a4d9f727d7fb2053e0d464044942f3769e7e272c53db59e48e89509fa --control-plane --certificate-key 155d0adbc1d4695b542639aec1b8e8771941c8ed5cb1e0bf50889c8e979efcac
+```
+
 #### add/copy kube config for Master node
 
 ```bash
