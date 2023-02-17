@@ -46,14 +46,13 @@ ansible-playbook -i inventory/ provision-nodes.yml --user root
 ## WORK IN PROGRESS
 ## init works
 ## join master does not yet
+## join worker nodes
 ansible-playbook -i inventory/ multi-master.yml --user root
 
 
 ## WARNING
 ### Destroy the kubernetes cluster
 ansible-playbook -i inventory/ destroy.yml --user root
-
-
 
 ```
 
@@ -118,6 +117,7 @@ kubeadm join <HAPROXY-IP>:6443 --token 6ixj5w.dj7eai8zw1kx8y34 \
 --discovery-token-ca-cert-hash sha256:341fdd8f7b14bdbbb5a440fd3d97336290c2467b055ed32b7551e0ca78a3b19a \
 --control-plane --certificate-key 9ec2409309a253ec9de57899049b9a333bcfb9952e0720c5542c239453d5df29
 # if the key is expired run this command from root@MASTER-NODE-1.com to get new key
+# kubeadm init phase upload-certs --upload-certs 
 ```
 
 #### add/copy kube config for Master node
