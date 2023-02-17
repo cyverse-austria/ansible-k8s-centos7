@@ -1,13 +1,20 @@
 ---
-
 - name: Check current Kubernetes controler status
   command: kubeadm token list
   register: token_list_result
   ignore_errors: True
 
-- name: Initialize Kubernetes controler
+# - name: Get cluster certificate key
+#   shell: kubeadm init phase upload-certs --upload-certs
+#   register: certificate_key
+#   when: "'failed' in token_list_result.stderr"
+
+# - set_fact:
+#     certificate_key: '{{certificate_key.stdout_lines}}'
+
+- name: join Kubernetes controler
   command: |
-    kubeadm init --control-plane-endpoint="{{hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address}}:{{kubernetes_default_port}}" --upload-certs --pod-network-cidr={{kubernetes_network}}
+    kubeadm join {{hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address}}:{{kubernetes_default_port}} --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}} --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}} --control-plane --certificate-key {{ certificate_key }}
   when: "'failed' in token_list_result.stderr"
 
 - name: Waiting for configuration to become available
@@ -46,12 +53,3 @@
 
 - set_fact:
     cert: '{{cert_result.stdout_lines}}'
-
-# using weave addon: https://www.weave.works/docs/net/latest/kubernetes/kube-addon/
-- name: install Pod network
-  become: yes
-  become_user: root
-  shell: kubectl apply -f "https://github.com/flannel-io/flannel/releases/download/v0.21.1/kube-flannel.yml" >> pod_setup.txt
-  args:
-    chdir: $HOME
-    creates: pod_setup.txt
