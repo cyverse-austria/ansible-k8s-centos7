@@ -15,6 +15,10 @@
 #   roles:
 #     - k8s-controler-join
 
+- hosts: kube-apiserver-haproxy[0]
+  name: Gather facts from collectors
+  tasks: [ ]
+
 - name: Setup k8s worker
   hosts: 
     - k8s-worker
