@@ -50,6 +50,12 @@ ansible-playbook -i inventory/ provision-nodes.yml --user root
 ansible-playbook -i inventory/ multi-master.yml --user root
 
 
+## VICE HAPROXY
+## install and configure haproxy for vice
+## TODO - fix the template
+# ansible-playbook -i inventory/ vice-haproxy-install.yaml --user root
+
+
 ## WARNING
 ### Destroy the kubernetes cluster
 ansible-playbook -i inventory/ destroy.yml --user root

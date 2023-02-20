@@ -1,7 +1,7 @@
 # gather facts from haproxy node
-- hosts: kube-apiserver-haproxy[0]
-  name: Gather facts from collectors
-  tasks: [ ]
+# - hosts: kube-apiserver-haproxy[0]
+#   name: Gather facts from collectors
+#   tasks: [ ]
 
 # - hosts: kube-apiserver-haproxy
 #   name: restart haproxy
