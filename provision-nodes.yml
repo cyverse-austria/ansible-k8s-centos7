@@ -49,6 +49,10 @@
       package:
         name: socat
         state: present
+    - name: Install iptables-legacy
+      package:
+        name: iptables-legacy
+        state: present
 
   roles:
     - githubixx.containerd
