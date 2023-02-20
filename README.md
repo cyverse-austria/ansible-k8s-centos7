@@ -156,6 +156,10 @@ You can run the same command to each **worker node** in order to join them to th
 # ssh root@WORKER-NODE-1.com
 kubeadm join <HAPROXY-IP>:6443 --token 6ixj5w.dj7eai8zw1kx8y34 \
 --discovery-token-ca-cert-hash sha256:341fdd8f7b14bdbbb5a440fd3d97336290c2467b055ed32b7551e0ca78a3b19a
+
+
+# If you have forgoten the certs
+kubeadm token create --print-join-command
 ```
 
 # Extra
@@ -168,12 +172,12 @@ analyses. To mark a node as a VICE worker node, run this command on any node tha
 
 **Run this command to label node**
 ```bash
-kubectl label nodes vice-w1.cyverse.at vice=true
+kubectl label nodes vice-w5.k8s.cyverse.at vice=true
 ```
 
 **To prevent non-VICE pods from running on a node, run this command:**
 ```bash
-kubectl taint nodes vice-w1.cyverse.at vice=only:NoSchedule
+kubectl taint nodes vice-w5.k8s.cyverse.at vice=only:NoSchedule
 ```
 
 **check if labeld**
