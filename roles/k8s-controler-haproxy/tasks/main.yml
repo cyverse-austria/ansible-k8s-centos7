@@ -51,7 +51,7 @@
 - name: install Pod network
   become: yes
   become_user: root
-  shell: kubectl apply -f "https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml" >> pod_setup.txt
+  shell: kubectl apply -f "https://github.com/flannel-io/flannel/releases/download/v0.21.1/kube-flannel.yml" >> pod_setup.txt
   args:
     chdir: $HOME
     creates: pod_setup.txt
