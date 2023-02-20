@@ -1,6 +1,6 @@
 # ansible-k8s-centos7
 
-`Ansible version: 2.13.3`
+`Ansible version: 2.10.8`
 
 `kubernetes version: 1.26.1`
 
@@ -172,12 +172,12 @@ analyses. To mark a node as a VICE worker node, run this command on any node tha
 
 **Run this command to label node**
 ```bash
-kubectl label nodes vice-w5.k8s.cyverse.at vice=true
+kubectl label nodes k8s-vice01.cyverse.at vice=true
 ```
 
 **To prevent non-VICE pods from running on a node, run this command:**
 ```bash
-kubectl taint nodes vice-w5.k8s.cyverse.at vice=only:NoSchedule
+kubectl taint nodes k8s-vice01.cyverse.at vice=only:NoSchedule
 ```
 
 **check if labeld**
