@@ -3,10 +3,10 @@
   name: Gather facts from collectors
   tasks: [ ]
 
-- hosts: kube-apiserver-haproxy
-  name: restart haproxy
-  roles:
-    - restart-haproxy
+# - hosts: kube-apiserver-haproxy
+#   name: restart haproxy
+#   roles:
+#     - restart-haproxy
 
 - name: Setup k8s controler main
   hosts: k8s-control-plane[0]
@@ -27,11 +27,11 @@
 
 
 
-- name: Setup k8s worker
-  hosts: 
-    - k8s-worker
-  become: yes
-  gather_facts: yes
-  strategy: linear
-  roles:
-    - k8s-worker
+# - name: Setup k8s worker
+#   hosts: 
+#     - k8s-worker
+#   become: yes
+#   gather_facts: yes
+#   strategy: linear
+#   roles:
+#     - k8s-worker
