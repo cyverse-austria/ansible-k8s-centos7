@@ -14,9 +14,16 @@ k8s-worker
 
 [k8s-worker]
 w1.k8s.cyverse.at
+w2.k8s.cyverse.at
+w3.k8s.cyverse.at
+w4.k8s.cyverse.at
+vice-w5.k8s.cyverse.at
 
 [vice-workers]
+vice-w5.k8s.cyverse.at
 
 [outward-facing-proxy]
+haproxy.vice.cyverse.at
 
 [haproxy]
+haproxy.vice.cyverse.at
