@@ -5,7 +5,7 @@
 `kubernetes version: 1.26.1`
 
 
-Ansible playbooks to deploy kubernetes on Centos7.
+Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 9.
 
 **Setup HA control plane/multi master node with Haproxy**
 
