@@ -20,7 +20,7 @@ ansible-galaxy install githubixx.containerd
 
 ### Update the inventory
 
-update the [inventory](kubernetes-multi-master\inventory\cyverse)
+update the [inventory](inventory\cyverse)
 
 ### Ping for ssh connections
 
