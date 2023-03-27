@@ -1,0 +1,71 @@
+---
+- name: configure kube-apiserver haproxy
+  hosts: kube-apiserver-haproxy
+  gather_facts: true
+  become: yes
+  roles:
+    - kube-apiserver-haproxy-installer
+  tasks:
+    - name: Start haproxy
+      systemd:
+        daemon_reload: yes
+        service: haproxy
+        state: started
+        enabled: yes
+
+- name: configure control plane firewalls
+  hosts: k8s-control-plane
+  gather_facts: true
+  become: yes
+  roles: 
+    - control-plane-firewaller
+  tasks:
+    - name: reload firewall
+      shell: systemctl reload iptables
+      ignore_errors: yes
+      tags:
+        - firewall
+
+- name: configure worker firewalls
+  hosts: k8s-worker
+  gather_facts: true
+  become: yes
+  roles:
+    - worker-firewaller
+  tasks:
+    - name: reload firewall
+      shell: systemctl reload iptables
+      ignore_errors: yes
+      tags:
+        - firewall
+
+- name: install stuff
+  hosts: k8s
+  gather_facts: true
+  become: yes
+
+  pre_tasks:
+    - name: Install socat
+      package:
+        name: socat
+        state: present
+
+  roles:
+    - githubixx.containerd
+    - docker-installer # todo remove actual docker installs
+    - kubeadm-installer
+
+  tasks:
+    - name: start containerd
+      systemd:
+        daemon_reload: yes
+        service: containerd
+        state: started
+        enabled: yes
+
+    - name: start kubelet
+      systemd:
+        daemon_reload: yes
+        service: kubelet
+        state: started
+        enabled: yes

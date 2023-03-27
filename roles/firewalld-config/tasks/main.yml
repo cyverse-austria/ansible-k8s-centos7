@@ -1,0 +1,81 @@
+---
+- name: install firewalld
+  yum:
+      name: firewalld
+      state: present
+
+- name: enable firewalld
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: Place services
+  copy:
+    src: services/
+    dest: /etc/firewalld/services
+
+- name: Place statically defined ipsets
+  copy:
+    src: ipsets/
+    dest: /etc/firewalld/ipsets
+
+- name: Place haproxy ipset
+  template:
+    src: ipsets/haproxy.xml.tmpl
+    dest: /etc/firewalld/ipsets/haproxy.xml
+    mode: 0644
+
+- name: Place k8s-controller ipset
+  template:
+    src: ipsets/k8s-controller.xml.tmpl
+    dest: /etc/firewalld/ipsets/k8s-controller.xml
+    mode: 0644
+
+- name: Place k8s-worker ipset
+  template:
+    src: ipsets/k8s-worker.xml.tmpl
+    dest: /etc/firewalld/ipsets/k8s-worker.xml
+    mode: 0644
+
+- name: Place zones
+  copy:
+    src: zones/
+    dest: /etc/firewalld/zones
+
+- name: Enable the masquerade option in the default zone.
+  firewalld:
+    permanent: yes
+    immediate: yes
+    masquerade: yes
+    state: enabled
+
+- name: restart firewalld
+  service: 
+    name: firewalld 
+    state: restarted 
+    enabled: yes
+
+- name: enable the consul service in the default zone.
+  firewalld:
+    permanent: yes
+    immediate: yes
+    service: consul
+    state: enabled
+
+- name: enable the vault service in the default zone
+  firewalld:
+    permanent: yes
+    immediate: yes
+    service: vault
+    state: enabled
+
+- name: enable the cni-weavenet service in the default zone.
+  firewalld:
+    permanent: yes
+    immediate: yes
+    service: cni-weavenet
+    state: enabled
+
+- name: Reload firewalld
+  command: firewall-cmd --reload

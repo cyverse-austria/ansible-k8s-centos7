@@ -1,0 +1,6 @@
+- name: restart firewall
+  service: 
+    name: "{{ FIREWALL_SERVICE }}" 
+    state: restarted 
+    enabled: yes
+  when: ansible_distribution != 'Ubuntu'

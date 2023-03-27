@@ -1,0 +1,4 @@
+FIREWALL_SERVICE: ufw
+
+FIREWALL_PATH: /etc/ufw/applications.d
+

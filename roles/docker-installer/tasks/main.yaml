@@ -1,0 +1,64 @@
+---
+- name: install yum-utils
+  package:
+    name: yum-utils
+    state: present
+
+- name: install device-mapper-persistent-data
+  package:
+    name: device-mapper-persistent-data
+    state: present
+
+- name: install lvm2
+  package:
+    name: lvm2
+    state: present
+
+- name: set up stable docker repo
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# - name: install docker-ce
+#   package:
+#     name: docker-ce-18.09.9
+#     state: present
+
+# - name: install yum-plugin-versionlock
+#   package:
+#     name: yum-plugin-versionlock
+#     state: present
+
+# - name: versionlock docker
+#   shell: yum versionlock docker-ce-18.09.9
+#   ignore_errors: yes
+
+# - name: install docker-ce-cli
+#   package:
+#     name: docker-ce-cli-20.10.12
+#     state: present
+
+# - name: versionlock docker-ce-cli
+#   shell: yum versionlock docker-ce-cli-18.09.9
+#   ignore_errors: yes
+
+- name: install containerd.io
+  package:
+    name: containerd.io
+    state: present
+
+# - name: create the docker configuration directory
+#   file:
+#     path: /etc/docker
+#     state: directory
+#     mode: 0755
+
+# - name: Configure docker
+#   copy:
+#     dest: /etc/docker/daemon.json
+#     src: daemon.json
+#     mode: "o-w"
+
+# - name: Set /etc/sysconfig/docker
+#   copy:
+#     dest: /etc/sysconfig/docker
+#     src: sysconfig_docker
+#     mode: "o-w"
