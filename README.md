@@ -15,7 +15,7 @@ Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 9.
 ### install required ansible roles
 
 ```bash
-ansible-galaxy install githubixx.containerd
+ansible-galaxy -r requirements.yml
 ```
 
 ### Update the inventory
@@ -37,17 +37,17 @@ ansible -i inventory/ -m ping all --user root
 ansible -i inventory/ -m ping all --user root
 
 # setup the firwall 
-ansible-playbook -i inventory/ firewalld-config.yml --user root
+ansible-playbook --inventory=inventory/ --user=ansible --become ./firewalld-config.yml
 
 # install all dependencies for hosts
 ## This will also setup the haproxy for the master node proxy
-ansible-playbook -i inventory/ provision-nodes.yml --user root
+ansible-playbook --inventory=inventory/ --user=ansible --become ./provision-nodes.yml --extra-vars=haproxy=o
 
 ## WORK IN PROGRESS
 ## init works
 ## join master does not yet
 ## join worker nodes
-ansible-playbook -i inventory/ multi-master.yml --user root
+ansible-playbook --inventory=inventory/ --user=ansible --become ./multi-master.yml
 
 
 ## VICE HAPROXY
@@ -61,6 +61,8 @@ ansible-playbook -i inventory/ multi-master.yml --user root
 ansible-playbook -i inventory/ destroy.yml --user root
 
 ```
+
+## The rest should not be needed anymore
 
 ### Initialize the first Master node
 **keep in mind to edit the haproxy of and remove the first second master, because it will allways give timeout since the second master is not initiated, once the first master is initiated you can add back the second master to the haproxy**

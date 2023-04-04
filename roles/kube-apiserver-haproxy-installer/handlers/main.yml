@@ -1,0 +1,8 @@
+---
+
+- name: k8s-worker-fact-gatherer | restart haproxy
+  ansible.builtin.systemd:
+    daemon_reload: true
+    service: haproxy
+    state: restarted
+    enabled: true
