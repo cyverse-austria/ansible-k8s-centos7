@@ -22,10 +22,6 @@
   delegate_to: "{{ groups['k8s-control-plane'][0] }}"
   check_mode: false
 
-# - name: Debug 1
-#   ansible.builtin.debug:
-#     var: r_join_command
-
 - name: Get get join cert
   ansible.builtin.command:
     kubeadm init phase upload-certs --upload-certs
@@ -33,35 +29,10 @@
   delegate_to: "{{ groups['k8s-control-plane'][0] }}"
   check_mode: false
 
-# - name: Debug 2
-#   ansible.builtin.debug:
-#     var: r_certificate
-
-# - name: Debug 3
-#   ansible.builtin.debug:
-#     msg: "{{ r_join_command.stdout }} --control-plane --certificate-key {{ r_certificate.stdout_lines[2] }}"
-
-# - name: Need to know 1
-#   ansible.builtin.debug:
-#     # msg: "{{hostvars[groups['k8s-control-plane']]}}"
-#     # var: hostvars[groups['k8s-control-plane'][0]].cert[0]
-#     msg: "{{ hostvars[groups['k8s-control-plane'][0]].cert[0] }}"
-#
-# - name: Need to know 2
-#   ansible.builtin.debug:
-#     var: hostvars[groups['kube-apiserver-haproxy'][0]].ansible_all_ipv4_addresses[0]
-
 - name: Join Kubernetes controller
   ansible.builtin.command:
     "{{ r_join_command.stdout }} --control-plane --certificate-key {{ r_certificate.stdout_lines[2] }}"
-    # kubeadm join --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}}
-    # --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}}
-    # --control-plane
-    # {{hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address}}:{{kubernetes_default_port}}
   when: not kubelet_presence.stat.exists | bool
-    # --certificate-key {{ certificate_key }}
-
- # changed
 
 - name: Waiting for configuration to become available
   ansible.builtin.wait_for:
