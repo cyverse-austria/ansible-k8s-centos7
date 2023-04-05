@@ -15,9 +15,21 @@
       - "{{ groups['k8s-control-plane'][0] }}"
       - "{{ groups['kube-apiserver-haproxy'][0] }}"
 
-- name: Join Kubernetes cluster
+- name: Get get join command
   ansible.builtin.command:
-    kubeadm join --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}}
-    --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}}
-    {{hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address}}:{{kubernetes_default_port}}
+    kubeadm token create --print-join-command
+  register: r_join_command
+  delegate_to: "{{ groups['k8s-control-plane'][0] }}"
+  check_mode: false
+
+- name: Join Kubernetes controller
+  ansible.builtin.command:
+    "{{ r_join_command.stdout }}"
   when: not kubelet_presence.stat.exists | bool
+
+# - name: Join Kubernetes cluster
+#   ansible.builtin.command:
+#     kubeadm join --discovery-token-ca-cert-hash sha256:{{hostvars[groups['k8s-control-plane'][0]].cert[0]}}
+#     --token {{hostvars[groups['k8s-control-plane'][0]].token[0]}}
+#     {{hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address}}:{{kubernetes_default_port}}
+#   when: not kubelet_presence.stat.exists | bool

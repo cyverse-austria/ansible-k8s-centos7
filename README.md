@@ -12,6 +12,9 @@ Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 9.
 
 ## preq
 
+Be sure to have a reasonably internet connection. Otherwise there could be timeouts during package installation.  
+Remove ansible cache! if you have one.
+
 ### install required ansible roles
 
 ```bash
