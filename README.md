@@ -13,7 +13,8 @@ Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 9.
 ## preq
 
 Be sure to have a reasonably internet connection. Otherwise there could be timeouts during package installation.  
-Remove ansible cache! if you have one.
+Remove ansible cache! if you have one.  
+There has to be as user with passwordless ssh and passwordless sudo access or root is allowed to login without a password.
 
 ### install required ansible roles
 
@@ -39,18 +40,19 @@ ansible -i inventory/ -m ping all --user root
 # to make sure ssh works for all the nodes
 ansible -i inventory/ -m ping all --user root
 
-# setup the firwall 
-ansible-playbook --inventory=inventory/ --user=ansible --become ./firewalld-config.yml
+# setup the firwall
+ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./firewalld-config.yml
 
 # install all dependencies for hosts
 ## This will also setup the haproxy for the master node proxy
-ansible-playbook --inventory=inventory/ --user=ansible --become ./provision-nodes.yml --extra-vars=haproxy=o
+TODO the --extra-vars has to be replaced with a automated decision.
+ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./provision-nodes.yml --extra-vars=haproxy=o
 
 ## WORK IN PROGRESS
 ## init works
-## join master does not yet
+## join master
 ## join worker nodes
-ansible-playbook --inventory=inventory/ --user=ansible --become ./multi-master.yml
+ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./multi-master.yml
 
 
 ## VICE HAPROXY

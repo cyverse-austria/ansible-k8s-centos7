@@ -49,7 +49,7 @@
 
   pre_tasks:
     - name: Install socat
-      ansible.builtin.package:
+      ansible.builtin.yum:
         name: socat
         state: present
 

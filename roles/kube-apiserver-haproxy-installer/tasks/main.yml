@@ -1,6 +1,6 @@
 ---
 - name: Install haproxy and setools
-  ansible.builtin.package:
+  ansible.builtin.yum:
     name:
       - haproxy
       - setools
