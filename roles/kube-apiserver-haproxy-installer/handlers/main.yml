@@ -6,3 +6,9 @@
     service: haproxy
     state: restarted
     enabled: true
+
+- name: Move example haproxy.cfg
+  ansible.builtin.command:
+    mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.example
+  args:
+    creates: /etc/haproxy/haproxy.cfg.example

@@ -18,9 +18,7 @@ There has to be as user with passwordless ssh and passwordless sudo access or ro
 
 ### install required ansible roles
 
-```bash
-ansible-galaxy -r requirements.yml
-```
+`ansible-galaxy -r requirements.yml`
 
 ### Update the inventory
 
@@ -28,44 +26,45 @@ update the [inventory](inventory\cyverse)
 
 ### Ping for ssh connections
 
-```bash
-ansible -i inventory/ -m ping all --user root
-```
+`ansible -i inventory/ -m ping all --user root`
 
 ## Get Started
 
 ### Run playbooks
 
+to make sure ssh works for all the nodes
+`ansible -i inventory/ -m ping all --user root`
+
+setup the firwall
+`ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./firewalld-config.yml`
+
+install all dependencies for hosts  
+This will also setup the haproxy for the master node proxy
+`ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./provision-nodes.yml`
+
+* init works
+* join master
+* join worker nodes
+
+`ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./multi-master.yml`
+or
 ```bash
-# to make sure ssh works for all the nodes
-ansible -i inventory/ -m ping all --user root
-
-# setup the firwall
-ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./firewalld-config.yml
-
-# install all dependencies for hosts
-## This will also setup the haproxy for the master node proxy
-TODO the --extra-vars has to be replaced with a automated decision.
-ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./provision-nodes.yml --extra-vars=haproxy=o
-
-## WORK IN PROGRESS
-## init works
-## join master
-## join worker nodes
-ansible-playbook --inventory=inventory/ --user=<sudo-user> --become ./multi-master.yml
-
-
-## VICE HAPROXY
-## install and configure haproxy for vice
-## TODO - fix the template
-# ansible-playbook -i inventory/ vice-haproxy-install.yaml --user root
-
-
-## WARNING
-### Destroy the kubernetes cluster
-ansible-playbook -i inventory/ destroy.yml --user root
-
+for playbook in firewalld-config.yml provision-nodes.yml multi-master.yml;do
+  ansible-playbook --inventory=inventory/ --user=ansible --become ./${playbook}
+done
 ```
+
+```bash
+VICE HAPROXY
+install and configure haproxy for vice
+TODO - fix the template
+ansible-playbook -i inventory/ vice-haproxy-install.yaml --user root
+```
+
+
+**WARNING**
+Destroy the kubernetes cluster
+`ansible-playbook -i inventory/ destroy.yml --user root`
 
 ## The rest should not be needed anymore
 
