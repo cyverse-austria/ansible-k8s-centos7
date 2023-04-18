@@ -12,7 +12,8 @@
   ansible.builtin.shell: |
     kubeadm init \
       --control-plane-endpoint={{ hostvars[groups['kube-apiserver-haproxy'][0]].ansible_default_ipv4.address }}:{{ kubernetes_default_port }} \
-      --upload-certs --pod-network-cidr={{ kubernetes_network }}
+      --upload-certs --pod-network-cidr={{ kubernetes_network }} \
+      --service-cidr={{kubernetes_service_network}}
       # --ignore-preflight-errors=all
   args:
     executable: /bin/bash

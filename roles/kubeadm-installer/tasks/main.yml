@@ -14,6 +14,26 @@
   notify:
     - Reboot and wait
 
+- name: Install packages for Rocky
+  when:
+    - ansible_distribution == "Rocky"
+    - ansible_distribution_major_version | int > 8
+  block:
+    - name: Add ip_tables kernel module
+      community.general.modprobe:
+        name: ip_tables
+        state: present
+        # params: 'numdummies=2'
+        persistent: present
+    # - name: Install epel
+    #   ansible.builtin.yum:
+    #     name:
+    #       - epel-release
+    # - name: Install iptables
+    #   ansible.builtin.yum:
+    #     name:
+    #       - iptables-legacy
+
 - name: Install kube{let,adm,ctl}
   ansible.builtin.yum:
     name:
