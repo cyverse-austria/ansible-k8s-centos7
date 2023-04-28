@@ -5,7 +5,7 @@
 `kubernetes version: 1.26.1`
 
 
-Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 9.
+Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 8 & 9.
 
 **Setup HA control plane/multi master node with Haproxy**
 
@@ -26,7 +26,9 @@ update the [inventory](inventory\cyverse)
 
 ### Ping for ssh connections
 
-`ansible -i inventory/ -m ping all --user root`
+```bash
+ansible -i inventory/ -m ping all --user=<sudo-user>
+```
 
 ## Get Started
 
