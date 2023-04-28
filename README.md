@@ -32,13 +32,6 @@ update the [inventory](inventory\cyverse)
 
 ### Run playbooks
 
-#### Ping to all hosts
-Make sure ssh works for all the nodes
-
-```bash
-ansible -i inventory/ -m ping all --user root
-```
-
 #### setup the firewall
 
 ```bash
@@ -56,7 +49,8 @@ ansible-playbook -i inventory/ --user=<sudo-user> --become ./provision-nodes.yml
 This playbook will do the followings:
 * init master node
 * join master node
-* join worker nodes
+* join workers nodes
+* install CNI driver
 
 ```bash
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./multi-master.yml
