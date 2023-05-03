@@ -1,0 +1,10 @@
+---
+
+- name: Install haproxy and setools for Debian
+  ansible.builtin.apt:
+    name:
+      - haproxy
+      - setools
+    state: present
+  notify:
+    - Move example haproxy.cfg
