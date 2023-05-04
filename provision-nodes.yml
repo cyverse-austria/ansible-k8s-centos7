@@ -6,7 +6,8 @@
   tasks:
     - name: Put SELinux in permissive mode
       ansible.posix.selinux:
-        policy: targeted
+        policy: "{{ (ansible_facts['distribution'] == 'Debian') | ternary('default', 'targeted') }}"
+        # policy: targeted
         state: permissive
   roles:
     - kube-apiserver-haproxy-installer

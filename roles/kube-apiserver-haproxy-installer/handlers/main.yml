@@ -12,3 +12,9 @@
     mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.example
   args:
     creates: /etc/haproxy/haproxy.cfg.example
+
+- name: Activate selinux
+  command: selinux-activate
+
+- name: Reboot and wait
+  ansible.builtin.reboot:
