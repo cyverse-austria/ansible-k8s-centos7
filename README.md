@@ -17,7 +17,7 @@ There has to be as user with passwordless ssh and passwordless sudo access or ro
 
 ### Update the inventory
 
-update the [inventory](inventory\cyverse)
+update the [inventory](./inventory\hosts)
 
 ### Ping for ssh connections
 
