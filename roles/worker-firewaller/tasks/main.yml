@@ -1,24 +1,47 @@
 ---
-- name: check for comment in /etc/sysconfig/iptables
-  command: "grep -Fxq '# Kubernetes' /etc/sysconfig/iptables"
-  register: check_for_comment
-  check_mode: no
-  failed_when: check_for_comment.rc == 2
-  changed_when: check_for_comment.rc == 0
-  ignore_errors: yes
-  tags:
-    - firewall
 
-- name: add firewall rules
-  when: check_for_comment.changed
-  blockinfile:
-    insertafter: "# Kubernetes"
-    marker: "## {mark} Kubernetes"
-    path: /etc/sysconfig/iptables
-    block: |
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 10250 -j ACCEPT -m comment --comment "kubelet api access"
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 30000:32767 -j ACCEPT -m comment --comment "node ports"
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 6783 -j ACCEPT -m comment --comment "weavenet tcp"
-      -A INPUT -m state --state NEW -m udp -p udp --dport 6783:6784 -j ACCEPT -m comment --comment "weavenet udp"
+# TODO
+# same as in ../../control-plane-firewaller
+# no iptables, CentOS 7 uses firewalld
+
+# - name: check for comment in /etc/sysconfig/iptables
+#   command: "grep -Fxq '# Kubernetes' /etc/sysconfig/iptables"
+#   register: check_for_comment
+#   check_mode: no
+#   failed_when: check_for_comment.rc == 2
+#   changed_when: check_for_comment.rc == 0
+#   ignore_errors: yes
+#   tags:
+#     - firewall
+#
+# - name: add firewall rules
+#   when: check_for_comment.changed
+#   blockinfile:
+#     insertafter: "# Kubernetes"
+#     marker: "## {mark} Kubernetes"
+#     path: /etc/sysconfig/iptables
+#     block: |
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 10250 -j ACCEPT -m comment --comment "kubelet api access"
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 30000:32767 -j ACCEPT -m comment --comment "node ports"
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 6783 -j ACCEPT -m comment --comment "weavenet tcp"
+#       -A INPUT -m state --state NEW -m udp -p udp --dport 6783:6784 -j ACCEPT -m comment --comment "weavenet udp"
+#   tags:
+#     - firewall
+
+- name: Add firewal rules
+  ansible.builtin.iptables:
+    chain: INPUT
+    match:
+      - state
+      - tcp
+    ctstate: NEW
+    protocol: tcp
+    jump: ACCEPT
+    destination_ports:
+      - "6783:6784"
+      - "10250"
+      - "30000:32767"
   tags:
     - firewall
+  notify:
+    - Reload firewall

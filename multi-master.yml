@@ -1,7 +1,10 @@
+---
+- name: Gather some facts
 # gather facts from haproxy node
-# - hosts: kube-apiserver-haproxy[0]
-#   name: Gather facts from collectors
-#   tasks: [ ]
+  hosts: kube-apiserver-haproxy[0]
+  gather_facts: true
+  # name: Gather facts from collectors
+  # tasks: [ ]
 
 # - hosts: kube-apiserver-haproxy
 #   name: restart haproxy
@@ -10,11 +13,11 @@
 
 - name: Setup k8s controler main
   hosts: k8s-control-plane[0]
-  become: yes
-  gather_facts: yes
-  strategy: linear
+  become: true
+  gather_facts: true
+  # strategy: linear
   roles:
-    - k8s-controler-haproxy 
+    - k8s-controller-haproxy
 
 ## TODO
 # - name: Setup k8s controler others
@@ -25,13 +28,46 @@
 #   roles:
 #     - k8s-controler-join
 
+- name: Setup k8s worker
+  hosts:
+    - k8s-worker
+  become: true
+  gather_facts: true
+  strategy: linear
+  roles:
+    - k8s-worker
 
+- name: Setup k8s controller others
+  hosts: k8s-control-plane[1:]
+  become: true
+  gather_facts: true
+  # strategy: linear
+  roles:
+    - k8s-controller
+  tags:
+    - multimaster
+
+# - name: Change haproxy-conf
+#   hosts: kube-apiserver-haproxy
+#   # gather_facts: true
+#   become: true
+#   roles:
+#     - kube-apiserver-haproxy-installer
+#   # vars:
+#   #   - haproxy: "m"
 
 # - name: Setup k8s worker
-#   hosts: 
+#   hosts:
 #     - k8s-worker
-#   become: yes
-#   gather_facts: yes
+#   become: true
+#   gather_facts: true
 #   strategy: linear
 #   roles:
 #     - k8s-worker
+
+- name: Change haproxy-conf
+  hosts: kube-apiserver-haproxy
+  # gather_facts: true
+  become: true
+  roles:
+    - kube-apiserver-haproxy-installer

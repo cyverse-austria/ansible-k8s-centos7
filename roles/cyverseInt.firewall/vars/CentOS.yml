@@ -1,4 +1,0 @@
-FIREWALL_SERVICE: iptables
-
-FIREWALL_PATH: /etc/sysconfig/iptables
-

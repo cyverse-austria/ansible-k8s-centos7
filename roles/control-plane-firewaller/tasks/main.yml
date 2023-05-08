@@ -1,27 +1,53 @@
 ---
-- name: check for comment in /etc/sysconfig/iptables
-  command: "grep -Fxq '# Kubernetes' /etc/sysconfig/iptables"
-  register: check_for_comment
-  check_mode: no
-  failed_when: check_for_comment.rc == 2
-  changed_when: check_for_comment.rc == 0
-  ignore_errors: yes
-  tags:
-    - firewall
 
-- name: add firewall rules
-  when: check_for_comment.changed
-  blockinfile:
-    insertafter: "# Kubernetes"
-    marker: "## {mark} Kubernetes"
-    path: /etc/sysconfig/iptables
-    block: |
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 6443 -j ACCEPT -m comment --comment "kube-apiserver access"
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 2379:2380 -j ACCEPT -m comment --comment "etcd"
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 10250 -j ACCEPT -m comment --comment "kubelet api"
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 10251 -j ACCEPT -m comment --comment "kube-scheduler api"
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 10252 -j ACCEPT -m comment --comment "kube-controller-manager api"
-      -A INPUT -m state --state NEW -m tcp -p tcp --dport 6783 -j ACCEPT -m comment --comment "weavenet tcp"
-      -A INPUT -m state --state NEW -m udp -p udp --dport 6783:6784 -j ACCEPT -m comment --comment "weavenet udp"
+# TODO
+# CentOS 7 uses firewalld. => There is no iptables and no
+# file /etc/sysconfig/iptables. There is not systemd-iptables.
+# => it can't be reloaded.
+
+# - name: Check for comment in /etc/sysconfig/iptables
+#   ansible.builtin.command: "grep -Fxq '# Kubernetes' /etc/sysconfig/iptables"
+#   register: check_for_comment
+#   check_mode: false
+#   failed_when: false
+#   # failed_when: check_for_comment.rc == 2
+#   changed_when: check_for_comment.rc == 0
+#   # ignore_errors: yes
+#   tags:
+#     - firewall
+#
+# - name: add firewall rules
+#   when: check_for_comment.changed
+#   blockinfile:
+#     insertafter: "# Kubernetes"
+#     marker: "## {mark} Kubernetes"
+#     path: /etc/sysconfig/iptables
+#     block: |
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 6443 -j ACCEPT -m comment --comment "kube-apiserver access"
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 2379:2380 -j ACCEPT -m comment --comment "etcd"
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 10250 -j ACCEPT -m comment --comment "kubelet api"
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 10251 -j ACCEPT -m comment --comment "kube-scheduler api"
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 10252 -j ACCEPT -m comment --comment "kube-controller-manager api"
+#       -A INPUT -m state --state NEW -m tcp -p tcp --dport 6783 -j ACCEPT -m comment --comment "weavenet tcp"
+#       -A INPUT -m state --state NEW -m udp -p udp --dport 6783:6784 -j ACCEPT -m comment --comment "weavenet udp"
+#   tags:
+#     - firewall
+
+- name: Add firewal rules
+  ansible.builtin.iptables:
+    chain: INPUT
+    match:
+      - state
+      - tcp
+    ctstate: NEW
+    protocol: tcp
+    jump: ACCEPT
+    destination_ports:
+      - "2379:2380"
+      - "6443"
+      - "6783:6784"
+      - "10250:10252"
   tags:
     - firewall
+  notify:
+    - Reload firewall

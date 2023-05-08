@@ -1,52 +1,56 @@
 ---
-- name: configure kube-apiserver haproxy
+- name: Configure kube-apiserver haproxy
   hosts: kube-apiserver-haproxy
-  gather_facts: true
-  become: yes
+  # gather_facts: true
+  become: true
+  tasks:
+    - name: Put SELinux in permissive mode
+      ansible.posix.selinux:
+        policy: "{{ (ansible_facts['distribution'] == 'Debian') | ternary('default', 'targeted') }}"
+        # policy: targeted
+        state: permissive
   roles:
     - kube-apiserver-haproxy-installer
-  tasks:
-    - name: Start haproxy
-      systemd:
-        daemon_reload: yes
-        service: haproxy
-        state: started
-        enabled: yes
+  tags:
+    - haproxy
 
-- name: configure control plane firewalls
+# TODO
+# it's firewalld not iptables
+#
+- name: Configure control plane firewalls
   hosts: k8s-control-plane
   gather_facts: true
-  become: yes
-  roles: 
+  become: true
+  roles:
     - control-plane-firewaller
-  tasks:
-    - name: reload firewall
-      shell: systemctl reload iptables
-      ignore_errors: yes
-      tags:
-        - firewall
+  # tasks:
+  #   - name: reload firewall
+  #     ansible.builtin.shell: systemctl reload iptables
+  #     ignore_errors: true
+  # tags:
+  #   - firewall
 
-- name: configure worker firewalls
+- name: Configure worker firewalls
   hosts: k8s-worker
   gather_facts: true
-  become: yes
+  become: true
   roles:
     - worker-firewaller
-  tasks:
-    - name: reload firewall
-      shell: systemctl reload iptables
-      ignore_errors: yes
-      tags:
-        - firewall
+  # tasks:
+  #   - name: reload firewall
+  #     ansible.builtin.shell: systemctl reload iptables
+  #     ignore_errors: true
+  #     tags:
+  #       - firewall
 
-- name: install stuff
+- name: Install stuff
   hosts: k8s
   gather_facts: true
-  become: yes
+  become: true
 
   pre_tasks:
     - name: Install socat
-      package:
+      ansible.builtin.yum:
         name: socat
         state: present
 
@@ -56,16 +60,16 @@
     - kubeadm-installer
 
   tasks:
-    - name: start containerd
-      systemd:
-        daemon_reload: yes
+    - name: Start containerd
+      ansible.builtin.systemd:
+        daemon_reload: true
         service: containerd
         state: started
-        enabled: yes
+        enabled: true
 
-    - name: start kubelet
-      systemd:
-        daemon_reload: yes
+    - name: Start kubelet
+      ansible.builtin.systemd:
+        daemon_reload: true
         service: kubelet
         state: started
-        enabled: yes
+        enabled: true
