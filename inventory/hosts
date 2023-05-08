@@ -12,16 +12,17 @@ k8-c02
 [k8s-storage:children]
 k8s-worker
 
-[k8s-worker]
+[k8s-worker:children]
+vice-workers
+k8s-workers
+
+[k8s-workers]
 k8-w01
 k8-w02
-k8-vice-w01
 
 [vice-workers]
 k8-vice-w01
 
 [outward-facing-proxy]
 
-
 [haproxy]
-
