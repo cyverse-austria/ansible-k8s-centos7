@@ -1,14 +1,9 @@
-# ansible-k8s-centos7
+# ansible-k8s-rhel
+Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 8 & 9.
 
 `Ansible version: 2.10.8`
 
 `kubernetes version: 1.26.1`
-
-
-Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 8 & 9.
-
-**Setup HA control plane/multi master node with Haproxy**
-
 
 ## preq
 
