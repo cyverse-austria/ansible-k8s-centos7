@@ -1,5 +1,5 @@
 # ansible-k8s-rhel
-Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 8 & 9.
+Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 8.
 
 `Ansible version: 2.10.8`
 
