@@ -4,14 +4,13 @@
   gather_facts: true
   become: yes
   roles:
-    - { role: vice-haproxy-installer, include_dev: True }
+    - { role: vice-haproxy-installer }
 
   # Vars newly added
-  vars:
-    tls_pem_path: /etc/ssl/certs/cyverse.run.pem
+  vars: # TODO add while running?
+    tls_pem_path: /etc/ssl/certs/cyverse.run.pem    
     domain: cyverse.at
     regsub: '\.cyverse\.at$,'
-    include_dev: False
 
   tasks:
     - name: reload haproxy
