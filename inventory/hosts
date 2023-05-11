@@ -24,5 +24,6 @@ k8-w02
 k8-vice-w01
 
 [outward-facing-proxy]
+vice-haproxy-w01
 
 [haproxy]
