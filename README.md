@@ -29,6 +29,16 @@ ansible -i inventory/ -m ping all --user=<sudo-user>
 
 ### Run playbooks
 
+#### ONLY when NOT main (=> something in testmode)
+
+When running in *testmode* the whole environment will be generated with terraform on DigitalOcean. It takes some time
+the hostnames are available through DNS. To prevent timeouts, the generated hosts are added to every `/etc/hosts` file
+with the following playbook.
+
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user> --become ./add-hosts.yml
+```
+
 #### setup the firewall
 
 ```bash
