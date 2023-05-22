@@ -99,6 +99,18 @@ scp root@<MASTER_NODE>:/etc/kubernetes/admin.conf ~/.kube/config
 ```
 
 
+
+# add-hosts playbook
+
+Sometimes when you newely generate vms/resources It takes some time
+the hostnames are available through DNS. To prevent timeouts, the generated hosts "fetching from inventory" are added to every `/etc/hosts` file
+with the following playbook.
+
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user> --become ./add-hosts.yml
+```
+
+
 # TODO
 * modify and make sure the `vice-haproxy-install.yaml` workes.
 
