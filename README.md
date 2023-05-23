@@ -53,10 +53,16 @@ This playbook will do the followings:
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./multi-master.yml
 ```
 
+#### Init Cluster
+Install the vice HAproxy
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user> --become ./vice-haproxy-install.yaml
+```
+
 **OR** run all at once:
 
 ```bash
-for playbook in firewalld-config.yml provision-nodes.yml multi-master.yml;do
+for playbook in firewalld-config.yml provision-nodes.yml multi-master.yml vice-haproxy-install.yaml;do
   ansible-playbook --inventory=inventory/ --user=ansible --become ./${playbook}
 done
 ```
