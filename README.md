@@ -53,8 +53,8 @@ This playbook will do the followings:
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./multi-master.yml
 ```
 
-#### Init Cluster
-Install the vice HAproxy
+#### Install the vice HAproxy
+
 ```bash
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./vice-haproxy-install.yaml
 ```
