@@ -1,0 +1,11 @@
+---
+
+- name: Update apt-cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install haproxy and setools for Debian
+  ansible.builtin.apt:
+    name:
+      - snapd
+    state: present

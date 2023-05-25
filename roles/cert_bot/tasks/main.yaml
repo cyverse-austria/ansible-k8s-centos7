@@ -1,0 +1,86 @@
+---
+- name: Install haproxy and setools
+  ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
+
+- name: Install core
+  community.general.snap:
+    name:
+      - core
+
+- name: Install certbot
+  community.general.snap:
+    name:
+      - certbot
+    options:
+      - trust-plugin-with-root=ok
+    classic: true
+
+- name: Install certbot-dns-digitalocean
+  community.general.snap:
+    name:
+      - certbot-dns-digitalocean
+
+# TODO: the last three parts of the script
+# chmod 600 dg.ini
+# certbot certonly --dns-digitalocean --dns-digitalocean-credentials ~/abc/dg.ini -d vice-t1.cyverse.at -d '*.vice-t1.cyverse.at' -n --agree-tos -m franz.marko@tugraz.at
+
+- name: Certbot
+  when: do_token != "XNone"
+  block:
+    - name: Check existens
+      ansible.builtin.stat:
+        path: "/etc/letsencrypt/live/{{ domain }}/fullchain.pem"
+      register: "stat_fullchain"
+
+    - name: Check existens
+      ansible.builtin.stat:
+        path: "/etc/letsencrypt/live/{{ domain }}/privkey.pem"
+      register: "stat_privkey"
+
+    - name: Create dir for dg.ini
+      ansible.builtin.file:
+        path: /root/certbot
+        state: directory
+        owner: root
+        group: root
+        mode: "0700"
+
+    - name: Create dg.ini
+      ansible.builtin.copy:
+        content: "dns_digitalocean_token = {{ do_token }}"
+        dest: /root/certbot/dg.ini
+        owner: root
+        group: root
+        mode: "0600"
+
+    # - name: Debug
+    #   ansible.builtin.debug:
+    #     var: stat_privkey.stat.exists
+
+    - name: Create cert and key
+      shell: >
+        /snap/bin/certbot certonly --dns-digitalocean
+        --dns-digitalocean-credentials /root/certbot/dg.ini
+        -d "{{ domain }}" -d "*.{{ domain }}" -n
+        --agree-tos -m "{{ cert_mail }}"
+      when:
+        - not ( stat_privkey.stat.exists | bool and
+          stat_fullchain.stat.exists | bool )
+      args:
+        executable: /bin/bash
+      # check_mode: false
+      # creates:
+      #   - "/etc/letsencrypt/live/{{ domain }}/fullchain.pem"
+      #   - "/etc/letsencrypt/live/{{ domain }}/privkey.pem"
+      register: newcerts
+
+    # - name: Debug
+    #   ansible.builtin.debug:
+    #     var: newcerts
+
+    - name: Create sum.crt
+      shell: >
+        cat /etc/letsencrypt/live/{{ domain }}/fullchain.pem
+        /etc/letsencrypt/live/{{ domain }}/privkey.pem
+        > {{ tls_pem_path }}
+      when: newcerts.rc is defined and newcerts.rc == 0
