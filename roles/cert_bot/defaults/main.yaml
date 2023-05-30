@@ -1,7 +1,6 @@
 ---
-# tls_pem_path: /etc/ssl/certs/cyverse.run.pem
+
 domain: cyverse.run
-# regsub: '\.cyverse\.run$,'
 do_token: "None"
 cert_mail: "wer.weiss@mailinator.com"
 tls_pem_path: "/etc/ssl/certs/{{ domain }}.pem"
