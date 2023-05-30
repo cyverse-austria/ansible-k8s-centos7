@@ -7,7 +7,7 @@
     - role: cert_bot
       domain: cyverse.at
       cert_mail: "wer.weiss@mailinator.com"
-      tls_pem_path: /etc/ssl/certs/cyverse.at.pem
+      tls_pem_path: "/etc/ssl/certs/{{ domain }}.pem"
 
   # Vars newly added
   # vars: # TODO add while running?

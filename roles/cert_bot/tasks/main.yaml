@@ -61,8 +61,9 @@
       shell: >
         /snap/bin/certbot certonly --dns-digitalocean
         --dns-digitalocean-credentials /root/certbot/dg.ini
-        -d "{{ domain }}" -d "*.{{ domain }}" -n
-        --agree-tos -m "{{ cert_mail }}"
+        -d "{{ domain }}" -d "*.{{ domain }}"
+        -d "tmp.$(date | md5sum | dd bs=4 count=2 2> /dev/null).{{ domain }}"
+        -n --agree-tos -m "{{ cert_mail }}"
       when:
         - not ( stat_privkey.stat.exists | bool and
           stat_fullchain.stat.exists | bool )
