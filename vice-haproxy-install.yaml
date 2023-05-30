@@ -7,9 +7,9 @@
     - { role: vice-haproxy-installer }
 
   # Vars newly added
-  vars: # TODO add while running?
-    domain: cyverse.at
-    regsub: '\.cyverse\.at$,'
+  vars:
+    domain: vice.cyverse.at
+    regsub: '\.vice\.cyverse\.at$,'
     tls_pem_path: "/etc/ssl/certs/{{ domain }}.pem"
 
   tasks:

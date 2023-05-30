@@ -1,16 +1,10 @@
 ---
-- name: Install HAProxy on VICE proxy
+- name: Install & configure cert
   hosts: outward-facing-proxy
   gather_facts: true
   become: true
   roles:
     - role: cert_bot
       domain: cyverse.at
-      cert_mail: "wer.weiss@mailinator.com"
+      cert_mail: "foo.bar@mailinator.com"
       tls_pem_path: "/etc/ssl/certs/{{ domain }}.pem"
-
-  # Vars newly added
-  # vars: # TODO add while running?
-    # tls_pem_path: /etc/ssl/certs/cyverse.run.pem
-    # domain: cyverse.at
-    # cert_mail: "wer.weiss@mailinator.com"
