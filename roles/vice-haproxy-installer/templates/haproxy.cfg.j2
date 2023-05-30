@@ -42,7 +42,7 @@ frontend reverseproxy_http
 
 frontend reverseproxy
     mode http
-    bind *:443 ssl crt /etc/ssl/certs/update.vice.cyverse.at
+    bind *:443 ssl crt {{ tls_pem_path }}
     
     http-request set-header Host vice-landing if { hdr(host) -i vice.cyverse.at }
     http-request set-var(req.subdomain) req.hdr(host),lower,regsub(\.vice\.cyverse\.at$,) if { hdr_end(host) -i .vice.cyverse.at }
