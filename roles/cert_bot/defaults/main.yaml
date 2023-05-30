@@ -2,5 +2,5 @@
 
 domain: cyverse.run
 do_token: "None"
-cert_mail: "wer.weiss@mailinator.com"
+cert_mail: "foo.bar@mailinator.com"
 tls_pem_path: "/etc/ssl/certs/{{ domain }}.pem"
