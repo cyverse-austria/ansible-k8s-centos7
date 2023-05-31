@@ -1,10 +1,7 @@
 ---
-<<<<<<< Updated upstream
-=======
 - name: Install snapd
   ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
 
->>>>>>> Stashed changes
 - name: Install core
   community.general.snap:
     name:
