@@ -53,10 +53,16 @@ This playbook will do the followings:
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./multi-master.yml
 ```
 
+#### Install the vice HAproxy
+
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user> --become ./vice-haproxy-install.yaml
+```
+
 **OR** run all at once:
 
 ```bash
-for playbook in firewalld-config.yml provision-nodes.yml multi-master.yml;do
+for playbook in firewalld-config.yml provision-nodes.yml multi-master.yml vice-haproxy-install.yaml;do
   ansible-playbook --inventory=inventory/ --user=ansible --become ./${playbook}
 done
 ```
@@ -108,6 +114,15 @@ with the following playbook.
 
 ```bash
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./add-hosts.yml
+```
+
+
+# Install & create ssl certificates
+
+For more documentation see the [README](roles/cert_bot/README.md) 
+
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user> --become ./cert_bot.yaml
 ```
 
 
