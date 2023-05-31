@@ -1,7 +1,4 @@
 ---
-- name: Install haproxy and setools
-  ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
-
 - name: Install core
   community.general.snap:
     name:
@@ -20,12 +17,8 @@
     name:
       - certbot-dns-digitalocean
 
-# TODO: the last three parts of the script
-# chmod 600 dg.ini
-# certbot certonly --dns-digitalocean --dns-digitalocean-credentials ~/abc/dg.ini -d vice-t1.cyverse.at -d '*.vice-t1.cyverse.at' -n --agree-tos -m franz.marko@tugraz.at
-
 - name: Certbot
-  when: do_token != "XNone"
+  when: do_token != "None"
   block:
     - name: Check existens
       ansible.builtin.stat:

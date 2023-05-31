@@ -117,6 +117,15 @@ ansible-playbook -i inventory/ --user=<sudo-user> --become ./add-hosts.yml
 ```
 
 
+# Install & create ssl certificates
+
+For more documentation see the [README](roles/cert_bot/README.md) 
+
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user> --become ./cert_bot.yaml
+```
+
+
 # TODO
 * modify and make sure the `vice-haproxy-install.yaml` workes.
 
