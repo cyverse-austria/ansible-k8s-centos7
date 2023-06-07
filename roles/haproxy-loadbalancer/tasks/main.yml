@@ -1,19 +1,11 @@
 ---
 
-- name: DEBUG
-  debug:
-    var: ansible_facts['distribution']
-
 - name: Include tasks only if one of the files exist, otherwise skip the task
   ansible.builtin.include_tasks:
     file: "{{ item }}"
   with_first_found:
     - "{{ ansible_facts['distribution'] }}.yml"
     - package.yml
-    # - files:
-    #   - path/tasks.yaml
-    #   - path/other_tasks.yaml
-    #   skip: True
 
 - name: Generate haproxy.cfg
   ansible.builtin.template:
