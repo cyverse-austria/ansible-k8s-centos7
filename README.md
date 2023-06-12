@@ -135,7 +135,3 @@ This playbook has an additional variable `var_hosts`. Default ist `'~.*-vice-hap
 ```bash
 ansible-playbook -i inventory/ --user=<sudo-user>  --extra-vars="var_hosts=loadbalancer"--become ./cert_bot.yaml
 ```
-
-# TODO
-* ~~modify and make sure the `vice-haproxy-install.yaml` workes.~~
-

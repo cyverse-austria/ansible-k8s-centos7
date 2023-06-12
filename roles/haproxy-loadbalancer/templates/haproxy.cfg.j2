@@ -70,12 +70,12 @@ frontend  localhost
     http-request redirect scheme https unless is_https
 
     # keycloak
-    acl keycloak hdr(host) -i keycloak.cyverse.at
+    acl keycloak hdr(host) -i {{ keycloak }}
 
     http-request add-header X-Forwarded-Proto https
 
     # userportal backend
-    acl userportal hdr(host) -i user.cyverse.at
+    acl userportal hdr(host) -i {{ userportal }}
 
 
     #redirect to HTTPS if ssl_fc is false / off.
@@ -94,14 +94,9 @@ backend keycloak
     balance roundrobin
     option  log-health-checks
     option  forwardfor
-    # TODO server sX
 {% for host in groups['k8s-workers'] %}
-    server   {{ hostvars[host].ansible_hostname }} {{ hostvars[host].ansible_fqdn }}:31360 check
+    server   s{{ loop.index }} {{ hostvars[host].ansible_fqdn }}:31360 check
 {% endfor %}
-    # server  s1 k8-w01.cyverse.at:31360 check # worker nodes hostname
-    # server  s2 k8-w02.cyverse.at:31360 check
-    # server  s3 k8-w03.cyverse.at:31360 check
-
 
 #---------------------------------------------------------------------
 # round robin balancing between the userportal backends
@@ -111,10 +106,6 @@ backend userportal
     balance roundrobin
     option  log-health-checks
     option  forwardfor
-    # TODO server sX
 {% for host in groups['k8s-workers'] %}
-    server   {{ hostvars[host].ansible_hostname }} {{ hostvars[host].ansible_fqdn }}:30392 check
+    server   s{{ loop.index }} {{ hostvars[host].ansible_fqdn }}:30392 check
 {% endfor %}
-    # server  s1 k8-w01.cyverse.at:30392 check
-    # server  s2 k8-w02.cyverse.at:30392 check
-    # server  s3 k8-w03.cyverse.at:30392 check
