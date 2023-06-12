@@ -1,21 +1,15 @@
 ---
 
-- name: Install HAProxy
+- name: Install HAProxy loadbalancer
   hosts: loadbalancer
   gather_facts: true
   become: true
   roles:
-    # - role: cert_bot
-    #   # domain: vice.cyverse.at
-    #   cert_mail: "foo.bar@mailinator.com"
-    #   # tls_pem_path: "/etc/ssl/certs/{{ domain }}.pem"
     - role: haproxy-loadbalancer
-      # regsub: '\.cyverse\.at$,'
 
   # Vars newly added
   vars:
     domain: cyverse.at
-    # regsub: '\.vice\.cyverse\.at$,'
     tls_pem_path: "/etc/ssl/certs/{{ domain }}.pem"
 
   tasks:

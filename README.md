@@ -59,6 +59,12 @@ ansible-playbook -i inventory/ --user=<sudo-user> --become ./multi-master.yml
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./vice-haproxy-install.yaml
 ```
 
+#### Install the (HAproxy) loadbalancer
+
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user> --become ./haproxy-loadbalancer.yml
+```
+
 **OR** run all at once:
 
 ```bash
@@ -66,7 +72,6 @@ for playbook in firewalld-config.yml provision-nodes.yml multi-master.yml vice-h
   ansible-playbook --inventory=inventory/ --user=ansible --become ./${playbook}
 done
 ```
-
 
 **WARNING**
 Destroy the kubernetes cluster.
@@ -124,8 +129,13 @@ For more documentation see the [README](roles/cert_bot/README.md)
 ```bash
 ansible-playbook -i inventory/ --user=<sudo-user> --become ./cert_bot.yaml
 ```
+This playbook has an additional variable `var_hosts`. Default ist `'~.*-vice-haproxy\\..*'`. Change this var to the host or group the playbook should run on.
 
+
+```bash
+ansible-playbook -i inventory/ --user=<sudo-user>  --extra-vars="var_hosts=loadbalancer"--become ./cert_bot.yaml
+```
 
 # TODO
-* modify and make sure the `vice-haproxy-install.yaml` workes.
+* ~~modify and make sure the `vice-haproxy-install.yaml` workes.~~
 
