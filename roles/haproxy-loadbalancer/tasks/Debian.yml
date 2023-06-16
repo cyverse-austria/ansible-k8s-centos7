@@ -4,8 +4,8 @@
   ansible.builtin.apt:
     update_cache: true
 
-- name: Install snapd
+- name: Install haproxy
   ansible.builtin.apt:
     name:
-      - snapd
+      - haproxy
     state: present
