@@ -2,23 +2,8 @@
 - name: Install snapd
   ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
 
-- name: Install core
-  community.general.snap:
-    name:
-      - core
-
-- name: Install certbot
-  community.general.snap:
-    name:
-      - certbot
-    options:
-      - trust-plugin-with-root=ok
-    classic: true
-
-- name: Install certbot-dns-digitalocean
-  community.general.snap:
-    name:
-      - certbot-dns-digitalocean
+- name: Install some snap-packages
+  ansible.builtin.import_tasks: snap-packages.yml
 
 - name: Certbot
   when: do_token != "None"
