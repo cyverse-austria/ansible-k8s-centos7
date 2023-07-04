@@ -1,81 +1,106 @@
 ---
-- name: install firewalld
-  yum:
-      name: firewalld
-      state: present
 
-- name: enable firewalld
-  service:
+- name: Install firewalld
+  ansible.builtin.yum:
     name: firewalld
-    enabled: yes
+    state: present
+
+- name: Enable firewalld
+  ansible.builtin.service:
+    name: firewalld
+    enabled: true
     state: started
 
 - name: Place services
-  copy:
+  ansible.builtin.copy:
     src: services/
     dest: /etc/firewalld/services
+    mode: "0644"
+  notify:
+    - Reload firewall
 
 - name: Place statically defined ipsets
-  copy:
+  ansible.builtin.copy:
     src: ipsets/
     dest: /etc/firewalld/ipsets
+    mode: "0644"
+  notify:
+    - Reload firewall
 
 - name: Place haproxy ipset
-  template:
+  ansible.builtin.template:
     src: ipsets/haproxy.xml.tmpl
     dest: /etc/firewalld/ipsets/haproxy.xml
-    mode: 0644
+    mode: "0644"
+  notify:
+    - Reload firewall
 
 - name: Place k8s-controller ipset
-  template:
+  ansible.builtin.template:
     src: ipsets/k8s-controller.xml.tmpl
     dest: /etc/firewalld/ipsets/k8s-controller.xml
-    mode: 0644
+    mode: "0644"
+  notify:
+    - Reload firewall
 
 - name: Place k8s-worker ipset
-  template:
+  ansible.builtin.template:
     src: ipsets/k8s-worker.xml.tmpl
     dest: /etc/firewalld/ipsets/k8s-worker.xml
-    mode: 0644
+    mode: "0644"
+  notify:
+    - Reload firewall
 
 - name: Place zones
-  copy:
+  ansible.builtin.copy:
     src: zones/
     dest: /etc/firewalld/zones
+    mode: "0644"
+  notify:
+    - Reload firewall
 
 - name: Enable the masquerade option in the default zone.
-  firewalld:
-    permanent: yes
-    immediate: yes
-    masquerade: yes
+  ansible.posix.firewalld:
+    permanent: true
+    immediate: true
+    masquerade: true
     state: enabled
+  notify:
+    - Reload firewall
 
-- name: restart firewalld
-  service: 
-    name: firewalld 
-    state: restarted 
-    enabled: yes
+# - name: Restart firewalld
+#   ansible.builtin.service:
+#     name: firewalld
+#     # state: restarted
+#     state: started
+#     enabled: true
 
-- name: enable the consul service in the default zone.
-  firewalld:
-    permanent: yes
-    immediate: yes
+- name: Enable the consul service in the default zone.
+  ansible.posix.firewalld:
+    permanent: true
+    immediate: true
     service: consul
     state: enabled
+  notify:
+    - Reload firewall
 
-- name: enable the vault service in the default zone
-  firewalld:
-    permanent: yes
-    immediate: yes
+- name: Enable the vault service in the default zone
+  ansible.posix.firewalld:
+    permanent: true
+    immediate: true
     service: vault
     state: enabled
+  notify:
+    - Reload firewall
 
-- name: enable the cni-weavenet service in the default zone.
-  firewalld:
-    permanent: yes
-    immediate: yes
+- name: Enable the cni-weavenet service in the default zone.
+  ansible.posix.firewalld:
+    permanent: true
+    immediate: true
     service: cni-weavenet
     state: enabled
+  notify:
+    - Reload firewall
 
-- name: Reload firewalld
-  command: firewall-cmd --reload
+# - name: Reload firewalld
+#   ansible.builtin.command: firewall-cmd --reload
