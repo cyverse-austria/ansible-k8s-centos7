@@ -38,16 +38,25 @@
   tasks:
 
     - name: Grab the swap space used (in megabytes)
-      ansible.builtin.shell: set -o pipefail && free -m | grep Swap | awk '{print $2}'
+      ansible.builtin.shell: >
+        set -o pipefail &&
+        free -m |
+        awk '/Swap/{print $2}'
       register: swap_used
+      failed_when: false
+      check_mode: false
+      # changed_when: snap_installed_result.rc != 0
+      changed_when: (swap_used.stdout_lines[0] | int) > 0
+      args:
+        executable: /bin/bash
 
     - name: Turn off swap
       ansible.builtin.shell: "swapoff -a"
-      when: (swap_used.stdout_lines[0] | int) > 100
+      when: (swap_used.stdout_lines[0] | int) > 0
 
     - name: Remove from /etc/fstab
       ansible.builtin.replace:
         path: /etc/fstab
-        regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+        regexp: '^([^#].*?\sswap\s+swap\s+.*)$'
         replace: '# \1'
-      when: (swap_used.stdout_lines[0] | int) > 100
+      when: (swap_used.stdout_lines[0] | int) > 0
