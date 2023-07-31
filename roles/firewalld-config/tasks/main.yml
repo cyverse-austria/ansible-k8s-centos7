@@ -68,12 +68,8 @@
   notify:
     - Reload firewall
 
-# - name: Restart firewalld
-#   ansible.builtin.service:
-#     name: firewalld
-#     # state: restarted
-#     state: started
-#     enabled: true
+- name: Force flush handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Enable the consul service in the default zone.
   ansible.posix.firewalld:
