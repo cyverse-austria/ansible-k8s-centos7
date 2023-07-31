@@ -1,4 +1,11 @@
-# ansible-k8s-rhel
+# [DEPRECATED] ansible-k8s-rhel
+** This project is deprecated. The functionality was moved into the [ansible-k8s](https://github.com/cyverse-austria/ansible-k8s) ** 
+
+.
+.
+.
+.
+
 Ansible playbooks to deploy kubernetes on Centos7 & Rocky Linux 8.
 
 `Ansible version: 2.10.8`
